@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>db2</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">db2</h1>
+</header>
+<style>
+h3
+{
+    font-weight: bold;
+}
+</style>
+<h1 id="plsql-2">PL/SQL (2)</h1>
+<h3 id="výhody">Výhody</h3>
+<ul>
+<li>kombinace procedurální logiky a SQL</li>
+<li>méně přenášených dat</li>
+<li>sdílení kódu mezi aplikacemi, nezávislost na platformě</li>
+</ul>
+<h3 id="nevýhody">Nevýhody</h3>
+<ul>
+<li>horší přenositelnost mezi jinými DBS (ale jak často to potřebujeme?)</li>
+</ul>
+<h2 id="plsql-blok">PL/SQL blok</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">declare</span> <span class="co">-- nepovinná deklarace lokálncích proměnných</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="cf">begin</span> <span class="co">-- povinné otevření bloku příkazů</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">exception</span> <span class="co">-- nepovinné zachytávání vyjímek</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="cf">end</span> <span class="co">-- povinné ukončení bloku</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">||</span> <span class="co">-- operátor konkatenace (sjednocení řetězců)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>v_lg Student.login<span class="dt">%TYPE</span> <span class="co">-- proměnná v_lg bude stejného typu co Student login </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="dt">%ROWTYPE</span> <span class="co">-- strukturovaný datový typ</span></span></code></pre></div>
+<h2 id="vyjímky">Vyjímky</h2>
+<ul>
+<li>s <code>set autocommit on</code> bude každý příkaz jedna transakce, takže operace <code>commit</code> a <code>rollback</code> nemají smysl</li>
+<li>s <code>set autocommit off</code> začíná transakce koncem té předchozí a je ukončena <code>commit</code> nebo <code>rollback</code></li>
+</ul>
+<h4 id="příklady-vyjímek">Příklady vyjímek</h4>
+<ul>
+<li><code>NO_DATA_FOUND</code> - <code>select</code> nevrátil žádný řádek</li>
+<li><code>TOO_MANY_ROWS</code> - <code>select into</code> vrátilo více než jeden řádek</li>
+<li><code>VALUE_ERROR</code> - chybná manipulace s hodnotou</li>
+</ul>
+<hr>
+<h1 id="procedury-3">Procedury (3)</h1>
+<p>Několik typů procedur: - Anonymní procedury - víceméně <code>begin ... end;</code> blok - Pojmenované procedury - Pojmenované funkce - vrací hodnotu, narozdíl od procedur</p>
+<h2 id="trigger">Trigger</h2>
+<ul>
+<li>spouští se v závislosti na nějakém příkazu (např. <code>insert</code>, <code>update</code>, <code>delete</code>)
+<ul>
+<li><code>before</code> - před provedením příkazu</li>
+<li><code>after</code> - po provedení příkazu</li>
+<li><code>instead of</code> - místo provedení příkazu</li>
+</ul></li>
+</ul>
+<hr>
+<h1 id="cykly-4">Cykly (4)</h1>
+<ul>
+<li><code>loop</code> - nekonečný cyklus</li>
+<li><code>while</code> - cyklus s podmínkou na začátku</li>
+<li><code>for</code> - cyklus s podmínkou na začátku a s inkrementací na konci</li>
+</ul>
+<h2 id="kurzory">Kurzory</h2>
+<ul>
+<li>Implicitní kurzor
+<ul>
+<li>vytváří se automaticky po provedení příkazů jako <code>insert</code>, <code>update</code>, <code>delete</code></li>
+</ul></li>
+<li>Explicitní kurzor
+<ul>
+<li><code>open jmeno_kurzoru</code> - otevření kurzoru</li>
+<li><code>fetch jmeno_kurzoru</code> - načítá aktuální záznam kurzoru do proměnné a posune se na další záznam</li>
+<li><code>close jmeno_kurzoru</code> - uzavření kurzoru</li>
+</ul></li>
+</ul>
+<h2 id="balíky">Balíky</h2>
+<ul>
+<li>Něco jako knihovny v jiných jazycích</li>
+<li>Seskupují procedury, funkce, proměnné, vyjímky do jednoho jmeného prostoru</li>
+<li>Specifikace a tělo</li>
+</ul>
+<h2 id="bulk-operace">Bulk operace</h2>
+<ul>
+<li><code>bulk collect</code> - načtení více záznamů do kolekce</li>
+<li><code>forall</code> - provedení operace nad všemi záznamy v kolekci</li>
+</ul>
+<hr>
+<h1 id="statické-a-dynamické-sql-5">Statické a dynamické SQL (5)</h1>
+<ul>
+<li>V PL/SQL bloku můžeme přímo volat pouze statické příkazy
+<ul>
+<li><code>select, insert, update, delete, merge</code></li>
+<li><code>lock table, commit, rollback, savepoint, set transaction</code></li>
+</ul></li>
+</ul>
+<h2 id="dynamické-sql">Dynamické SQL</h2>
+<ul>
+<li>umožňuje sestavit a volat jakékoliv SQL příkazy (na které má uživatel právo) za běhu aplikace</li>
+<li>Nevýhoda je, že nelze ověřit syntaktickou správnost</li>
+<li>Nebezpečí sql injection</li>
+<li><strong>Používame jen tehdy, když není možno použít statické PL/SQL</strong></li>
+</ul>
+<h2 id="zpracovaní-dotazu">Zpracovaní dotazu</h2>
+<ul>
+<li>DBS kontroluje, zda už nebyl příkaz dříve zaslán</li>
+<li>Pokud byl zaslán poprvé:
+<ol type="1">
+<li>Je naparsován a vytvoří se plán vykonávání dotazu</li>
+<li>Dotaz může být vykonán mnoha způsoby, DBS hledá ten nejlepší</li>
+<li>Tento proces může trvat déle, než samotné vykonání dotazu</li>
+</ol></li>
+<li>Pokud by již dříve zaslán, použije se dříve vytvořený plán vykonávání</li>
+<li>Při kontrole zda už nebyl vykonán se kontroluje cel řetězec
+<ul>
+<li><code>select * from student where login = 'x'</code> a <code>select * from student where login = 'y'</code> se budou lišit</li>
+</ul></li>
+<li>Používání <strong>vázaných proměnných</strong> (bind variables) umožňuje využít již vytvořený plán vykonávání
+<ul>
+<li><code>select * from student where login = :lg</code> a <code>select * from student where login = :lg</code> se budou shodovat</li>
+<li>Snižuje se tím zátěž na DBS a čas vykonávní</li>
+</ul></li>
+<li>PL/SQL používá vázané proměnné automaticky</li>
+<li><em>Vázané proměnné můžeme použít pouze u literálů (např. hodnoty atributu.. né jména tabulky)</em></li>
+<li>Porovnání výkonu
+<ul>
+<li>bez vázaných proměnných: 65.48s</li>
+<li>s vázanými proměnnými: 0.25s</li>
+</ul></li>
+</ul>
+<h2 id="sql-injection">SQL injection</h2>
+<h3 id="ochrana">Ochrana</h3>
+<ul>
+<li>Používaní statických dotazů</li>
+<li>V dynamických dotazech používat vázané proměnné</li>
+<li>Správné řízení přístupu (přístupová práva)</li>
+<li>Nepoužívat hodnotu přímo (třeba prvně převést na číslo)</li>
+</ul>
+<h3 id="má-smysl-psát-logiku-aplikace-v-plsql">Má smysl psát logiku aplikace v PL/SQL?</h3>
+<ul>
+<li>rozhodně <strong>ANO</strong></li>
+</ul>
+<hr>
+<h1 id="transakce-6">Transakce (6)</h1>
+<h2 id="zotavení-databáze">Zotavení databáze</h2>
+<h3 id="zotavení-recovery-zotavení-databáze-z-nějaké-chyby-přetečení-hodnoty-atributu-pád-systému">Zotavení (recovery) =&gt; zotavení databáze z nějaké chyby (přetečení hodnoty atributu, pád systému)</h3>
+<ul>
+<li>Základní jednotkou zotavení je transakce</li>
+<li>Né všechny DBS zotavení podporují</li>
+<li>Výsledkem zotavení musí být korektní stav</li>
+<li>Pro zotavení se používá <strong>redundatní informace</strong></li>
+<li>Komponenta SŘBD, která se stará o řízení transakcí je <code>manager transakcí</code></li>
+</ul>
+<h2 id="korektní-vs-konzistentní-stav">Korektní vs Konzistentní stav?</h2>
+<ul>
+<li>Korektní stav - stav, který odpovídá omezením (např. hodnota atributu musí být v intervalu) ????</li>
+<li>TBD.. pm me</li>
+</ul>
+<h2 id="transakce">Transakce</h2>
+<ul>
+<li>Logická jednotka práce s db (taky jednotkou zotavení)</li>
+<li>Transakce nemůže být uvnitř jiné transakce =&gt; Atomická, nědělitelná</li>
+<li>Začíná operací <code>begin transaction</code> a končí <code>commit</code> nebo <code>rollback</code></li>
+<li>Programátor je řídí pomocí příkazů <code>commit</code>(potvrzení) a <code>rollback</code>(vrácení)</li>
+</ul>
+<h2 id="klasifikace-chyb">Klasifikace chyb</h2>
+<ul>
+<li>Lokální chyby
+<ul>
+<li>Chyba v dotazu, přetečení dotazu</li>
+</ul></li>
+<li>Globální chyby
+<ul>
+<li>Systémové (soft crash) - Vpadek proudu, nebo pád systému</li>
+<li>Chyba HW (hard crash) - Poškození disku, nebo ztráta dat</li>
+</ul></li>
+</ul>
+<h2 id="potvrzovací-bod">Potvrzovací bod</h2>
+<ul>
+<li>Operace <code>commit</code> zavádí potvrzovací bod</li>
+<li>Operace <code>rollback</code> vrací databázi do stavu posledního potvrzovacího bodu</li>
+<li>V okamžiku potvrzení:
+<ul>
+<li>Všechny změny jsou trvale uloženy v databázi</li>
+<li>Všechny adresace a zámky entic uvolněny</li>
+</ul></li>
+</ul>
+<h2 id="vlastnost-acid">Vlastnost ACID</h2>
+<ul>
+<li><strong>A</strong> =&gt; Atomičnost - transakce je nedělitelná =&gt; musí být provedeny všechny operace, nebo žádná</li>
+<li><strong>C</strong> =&gt; Korektnost- transakce převádí korektní stav db do jiného korektního stavu (mezi začátkem a koncem nemusí být db v korektním stavu)</li>
+<li><strong>I</strong> =&gt; Izolovanost - transakce jsou navzájem izolovány =&gt; změny provedené jednou transakcí jsou pro ostatní viditelné až po <code>COMMIT</code></li>
+<li><strong>D</strong> =&gt; Trvalost - změny provedené transakcí jsou trvale uloženy v db</li>
+<li><em>(atomicity, consistency, isolation, durability)</em></li>
+</ul>
+<h2 id="implementační-detaily">Implementační detaily</h2>
+<ul>
+<li>Všechny změny musí být zapsány do logu před samotným zápisem změn do db
+<ul>
+<li>Po <code>commit</code> je zapsán do logu commit záznam</li>
+</ul></li>
+<li>Říká se tomu <strong>pravidlo dopředného zápisu</strong> (<strong>write-ahead log rule</strong>)</li>
+</ul>
+<h2 id="zotavení-systému">Zotavení systému</h2>
+<ul>
+<li>Zotavení není vázáno pouze na jednu transakci, ale na celou databázi</li>
+<li>Hlavní problémem při systémové chybě, je ztráta obsahu vlastní paměti</li>
+<li>Během zotavení se po restartu provádí:
+<ul>
+<li>Přesný stav transakce přerušné chybou není znám
+<ul>
+<li>Musí být zrušena (UNDO)</li>
+</ul></li>
+<li>Transakce byla úspěšně ukončena, ale změny nebyly přeneseny z logu do db
+<ul>
+<li>Musí být přepracována (REDO)</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="základní-techniky-zotavení">Základní techniky zotavení</h2>
+<ul>
+<li>Odložená (NO-UNDO/REDO) <em>deferred update</em>
+<ul>
+<li>Neprovádí aktualizaci logu a db až do potvrzení transakce</li>
+<li>Všechny aktualizace jsou zapsány do paměti</li>
+<li>Po <code>commitu</code> jsou aktualizace nejprve zaznamenány do logu a pak do db</li>
+<li>Pokud transakce selže, není <strong>nutné provést UNDO</strong> (protože db nebyla aktualizována)</li>
+<li><strong>REDO</strong> bude provedeno, jestli DBS zapsal aktualizace do logu, ale né do db</li>
+<li>Používa se pouze u krátkých transakcí, jinak <strong>hrozí přetečení</strong>(používá se In-Memory DBS)</li>
+</ul></li>
+</ul>
+<figure>
+<img src="assets/deferred_update.png" alt="" /><figcaption>deferred_update</figcaption>
+</figure>
+<ul>
+<li>Okamžitá (UNDO/NO-REDO) <em>immediate update</em>
+<ul>
+<li>Provádí aktualizaci logu po každé aktualizaci transakce</li>
+<li>Aktualizace jsou zapsány do logu, poté do db</li>
+<li>Pokud transakce selže, je nutné provést <strong>UNDO</strong> (na disk byly zapsány aktualizace, které musí být zrušeny)</li>
+<li>Do logu se <em>ukládají původní hodnoty</em>, což umožňuje UNDO</li>
+<li><strong>REDO</strong> není nutné, protože aktualizace byly zapsány do db</li>
+<li>(UNDO/NO-REDO), protože aktualizace bbyly zapsány do db před potvrzením transakce</li>
+<li><strong>Nízký výkon</strong></li>
+</ul></li>
+</ul>
+<figure>
+<img src="assets/immediate_update.png" alt="" /><figcaption>immediate_update</figcaption>
+</figure>
+<ul>
+<li>Kombinovaná (UNDO/REDO)
+<ul>
+<li>Aktualizace jsou zapisovány do logu po commitu</li>
+<li>K aktualizaci dochází v určitých časových intervalech - <strong>Kontrolní body (checkpoint)</strong></li>
+<li>Kontrolní body jsou vytvářeny třeba po určitém počtu záznamů
+<ul>
+<li>Zápis dosud provedených aktualizací do db</li>
+<li>Zápis záznamu o kontrolním bodu do logu</li>
+</ul></li>
+<li>Aktualizace db se týká všech transakcí vykonávaných v době kontrolního bodu, a transakcích před</li>
+</ul></li>
+</ul>
+<figure>
+<img src="assets/combined_update.png" alt="" /><figcaption>combined_update</figcaption>
+</figure>
+<ul>
+<li>T1 =&gt; úspěšně dokončena před Tc, aktualizace byly do logu zapsány při COMMITu =&gt; zapsána do db</li>
+<li>T2 =&gt; DBMS provede <strong>redo</strong> pro aktualizace provedené po Tc</li>
+<li>T3 =&gt; DBMS provede <strong>undo</strong> pro aktualizace provedené před Tc</li>
+<li>T4 =&gt; DBMS provede <strong>redo</strong> pro všechny aktualizace (ty byly při COMMITu zapsány do logu)</li>
+<li>T5 =&gt; Neřešímě.. COMMIT nebyl proveden a žádné aktualizace nebyly zapsány do db v čase Tc</li>
+</ul>
+<h3 id="po-restartu-dbs-spustí-tento-algoritmus">Po restartu DBS spustí tento algoritmus:</h3>
+<ol type="1">
+<li>Vytvoř 2 seznamy transakcí: UNDO a REDO</li>
+<li>Do UNDO vlož všechny transakce, které nebyly potvrzeny před posledním kontrolním bodem (REDO je prázdné)</li>
+<li>Začni procházet záznamy v logu od posledního kontrolního bodu
+<ol type="1">
+<li>Pokud je pro transakci T nalezen v logu záznam COMMIT, přesuň T z UNDO do REDO</li>
+</ol></li>
+<li>DBS prochází log zpětně a ruší aktualizace transakcí ze seznamu UNDO</li>
+<li>DBS prochází log dopředu a přepracovává aktualizace transakcí ze seznamu REDO</li>
+<li>Databáze je v korektním stavu <em>eyyy /</em></li>
+</ol>
+<h2 id="záchrané-body-savepoints">Záchrané body (savepoints)</h2>
+<ul>
+<li>Koncept záchraných bodů byl zaveden v SQL99, ale transakci <strong>rozděluje na menší části</strong></li>
+<li>Při <code>ROLLBACK</code> dochází k návratu na záchraný bod</li>
+<li>Záchraný bod není ekvivalentní s potvrzením změn pomocí <code>COMMIT</code></li>
+</ul>
+<h2 id="transakce-idk">Transakce (idk)</h2>
+<ul>
+<li>Všechny SQL příkazy jsou atomické, až na (<code>CALL</code> a <code>RETURN</code>)</li>
+<li>S <code>AUTOCOMMIT ON</code> rollback nedává smysl</li>
+</ul>
+<h2 id="zotavení-vs.-souběh">Zotavení vs. Souběh</h2>
+<ul>
+<li>V NO-SQL DBMS nejsou podporovány transakce pro řešení paralelního přístupu</li>
+<li>Programátor má zaručeno, že potvrzené aktualizace se z db neztratí</li>
+<li>V DBS většinou nejde izolovanost transakcí vypnout</li>
+</ul>
+<h1 id="skipped">7 skipped</h1>
+<hr>
+<h1 id="řízení-souběhu-8">Řízení souběhu (8)</h1>
+<ul>
+<li>Možná klasifikace DBS:
+<ul>
+<li>Jednouživatelská - může jí používat jenom jeden uživatel v daném čase</li>
+<li>Víceuživatelská - může jí používat více uživatelů současně</li>
+</ul></li>
+</ul>
+<h2 id="problémy-souběhu">Problémy souběhu</h2>
+<h3 id="ztráta-aktualizace-lost-update">Ztráta aktualizace (lost update)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>READ t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>READ t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>WRITE t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td></td>
+<td>WRITE t</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Dojde ke ztrátě aktualizace provedené transakcí A, v čase t3</li>
+</ul>
+<h3 id="nepotvrzená-závislost-uncommitted-dependency">Nepotvrzená závislost (uncommitted dependency)</h3>
+<ul>
+<li>Problém nastává, když transakce A načte nebo aktualizuje záznam, který byl aktualizován doposud nepotvrzenou transakcí B</li>
+<li>Jelikož transakce nebyla potvrzená, může se stát, že se stane <code>ROLLBACK</code>
+<ul>
+<li>V tomto případě transakce A pracuje s hodnotami, které nejsou platné</li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td></td>
+<td>WRITE t</td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td>READ t</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td></td>
+<td>ROLLBACK</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Transakce A pracuje s daty z t2, ačkoli platné hodnoty jsou hodnoty z t1</li>
+</ul>
+<h3 id="nekonzistentní-analýza-inconsistent-analysis">Nekonzistentní analýza (inconsistent analysis)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Data</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>acc1=30<br/> acc2=20<br/> acc3=50</td>
+<td>READ acc1 <br/> suma=30</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td>acc1=30<br/> acc2=20<br/> acc3=50</td>
+<td>READ acc2 <br/> suma=50</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>acc1=30<br/> acc2=20<br/> <strong>acc3=60</strong></td>
+<td></td>
+<td>WRITE acc3=60</td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td><strong>acc1=20</strong><br/> acc2=20<br/> acc3=60</td>
+<td></td>
+<td>WRITE acc1=20</td>
+</tr>
+<tr class="odd">
+<td>t5</td>
+<td>acc1=20<br/> acc2=20<br/> acc3=60</td>
+<td></td>
+<td>COMMIT</td>
+</tr>
+<tr class="even">
+<td>t6</td>
+<td>acc1=20<br/> acc2=20<br/> acc3=60</td>
+<td>READ acc3 <br/> suma=110 ne 100</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Transakce A počítá součet zůstatků na účtech, Transakce B převádí částku 10 z účtu acc1 na acc3</li>
+<li>Transakce A má k dispozici nekonzistentní db,, proto vykoná nekonzistentní analýzu (místo součtu 100 dostane 110)</li>
+<li>Není to problém nepotvrzené závislosti, protože transakce B potvrdí všechny aktualizace předtím, než si A vyžádá acc3</li>
+</ul>
+<h2 id="konflikty-čtení-a-zápisu">Konflikty čtení a zápisu</h2>
+<p><em>(R-Read, W-Write)</em></p>
+<ul>
+<li>RR
+<ul>
+<li>Je v pohodě, nenastává žádný problém</li>
+</ul></li>
+<li>RW
+<ul>
+<li>Může nastat problém nekonziostentní analýzy =&gt; <strong>problém nekonziostentní analýzy je zapříčiněn RW konfliktem</strong>:</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>READ t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>WRITE t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>(…)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Pokud B udělá aktualizaci a A načte znovu t, pak A získá odlišné hodnoty</li>
+<li>Tomuto jevu říkáme <strong>Neopakovatelné čtení</strong> (non-repeatable read):</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>READ t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>WRITE t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>READ t</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li>WR
+<ul>
+<li>A zapíše <code>t</code> a B pak chce číst <code>t</code></li>
+<li>Pokud B něco přečte, může nastat problém <strong>nepotvrzené závislosti</strong></li>
+<li>Tomuto jevu říkáme <strong>Špinavé čtení</strong> (dirty read):</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>WRITE t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>READ t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>ROLLBACK??</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+<li>WW
+<ul>
+<li>A zapíše <code>t</code> a B pak chce zapisovat <code>t</code></li>
+<li>Pokud B něco zapíše, může nastat jak problém <strong>ztráty aktualizace</strong> tak problém <strong>nepotvrzené závislosti</strong></li>
+<li>Tomuto jevu říkáme <strong>Špinavý zápis</strong> (dirty write):</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>WRITE t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>WRITE t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>ROLLBACK??</td>
+<td></td>
+</tr>
+</tbody>
+</table></li>
+</ul>
+<h2 id="techniky-řízení-souběhu">Techniky řízení souběhu</h2>
+<ul>
+<li><strong>Zamykání</strong> (locking) - používá většina DBMS
+<ul>
+<li>Pesimistický přístup k souběžnému zpracování (Předpoklad, že se paralelní transakce budou navzájem ovlivňovat)</li>
+<li>Systém má jednu kopii data jednotlivým transakcím přidělujej zámky
+<ul>
+<li><em>(Funguje to prostě jak mutex/locking v pythonu, c# .. 8 - slide 22)</em></li>
+</ul></li>
+</ul></li>
+<li><strong>Správa verzí</strong> (multiversion) - používá většina DBMS
+<ul>
+<li>Optimistický přístup k souběžnému zpracování (Předpoklad, že se paralelní transakce nebudou navzájem ovlivňovat)</li>
+<li>Vytváří kopie dat, a systém sleduje, která z verzí má být viditelná pro ostatní transakce</li>
+</ul></li>
+<li>Časová razítka (timestamps)</li>
+<li>Validace</li>
+</ul>
+<h2 id="typy-zámků">Typy zámků</h2>
+<ul>
+<li><strong>Výlučný zámek</strong> (exclusive lock, write lock) - označujeme X
+<ul>
+<li>Když A drží výlučný zámek na záznam <code>t</code>, pak požadavek paralelní transakce B na zámek libovolého typu na <code>t</code> není proveden</li>
+</ul></li>
+<li><strong>Sdíledný zámek</strong> (shared lock, read lock) - označujeme S
+<ul>
+<li>Požadavek paralelní transakce B na zámek <strong>X</strong> na záznam <code>t</code> <strong>není proveden</strong></li>
+<li>Požadavek paralelní transakce B na zámek <strong>S</strong> na záznam <code>t</code> <strong>je proveden</strong> + B bude držet S na <code>t</code></li>
+</ul></li>
+<li>Zámky jsou (<em>většinou</em>) přidělovány <strong>implicitně</strong></li>
+</ul>
+<h2 id="zamykací-protokol-data-access-protocol-locking-protocol">Zamykací protokol (data access protocol, locking protocol)</h2>
+<ol type="1">
+<li>Transakce, která chce <strong>získat záznam</strong> z db musí nejprve požadovat <strong>Sdílený zámek</strong> (S)</li>
+<li>Transakce, která chce <strong>aktualizovat záznam</strong> v db musí nejprve požadovat <strong>Výlučný zámek</strong> (X), pokud tato transakce drží S, jej změněn na X</li>
+<li>Jestliže zámek požadovaný transakcí B nemůže být přidělen, B přejde do <strong>stavu čekání</strong> (wait state)
+<ul>
+<li>Transakce B v tomtu stavu setrvá minimmálně do doby, než transakce A uvolní zámek</li>
+<li>Systém se musí postarat o to, aby transakce B nesetrvala v tomto stavu navždy (<em>livelock</em> nebo <em>starvation</em>)</li>
+</ul></li>
+<li><strong>Výlučné</strong> zámky jsou <strong>automaticky uvolněny na konci transakce</strong>, <strong>Sdílené</strong> zámky jsou také nejčastěji uvolněny na konci transakce</li>
+</ol>
+<ul>
+<li>Tomuto se říká <strong>Přísné dvoufázové zamykání</strong> (strict two-phase lockning)
+<ol type="1">
+<li>Zamykání zámků</li>
+<li>Uvolňování zámků</li>
+</ol></li>
+</ul>
+<h2 id="řešení-problémů-ztráty-aktualizace">Řešení problémů ztráty aktualizace</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>READ t<br/>Získán zámek S na <code>t</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>READ t<br/>Získán zámek S na <code>t</code></td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>WRITE t<br/>Požadavek na zámek X na <code>t</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td>wait</td>
+<td>WRITE t<br/>Požadavek na zámek X na <code>t</code></td>
+</tr>
+<tr class="odd">
+<td>t5</td>
+<td>wait</td>
+<td>wait</td>
+</tr>
+<tr class="even">
+<td>t6</td>
+<td>wait</td>
+<td>wait</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Aktualizace transakce A v t3 není akceptována, kvůli implicitnímu požadavku na zámek X, který koliduje s S přidělený B</li>
+<li>Transakce A přejde do stavu čekání. Ze stejného důvodu i B a obě transakce nepokračují v činnosti</li>
+<li>Vyřešili jsme problém ztráty aktualizace, ale vznikl problém <strong>uváznutí</strong> (deadlock)</li>
+</ul>
+<h2 id="řešení-problémů-nepotvrzené-závislosti">Řešení problémů nepotvrzené závislosti</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td></td>
+<td>WRITE t<br/>Získán zámek X na <code>t</code></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td>READ t<br/>Požadavek na zámek S na <code>t</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>wait</td>
+<td>COMMIT/ROLLBACK<br/>Uvolnění zámku X na <code>t</code></td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td>opakuj: READ t<br/>Získán zámek S na <code>t</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td></td>
+<td>WRITE t<br/>Získán zámek X na <code>t</code></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td>WRITE t<br/>Požadavek na zámek X na <code>t</code></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td>wait</td>
+<td>COMMIT/ROLLBACK<br/>Uvolnění zámku X na <code>t</code></td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td>opakuj: WRITE t<br/>Získán zámek X na <code>t</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Jelikož transakce A není závislá na nepotvrzené aktualizaci transakce B, tento problém souběhu je vyřešen</li>
+</ul>
+<h2 id="řešení-problému-nekonzistentní-analýzy">Řešení problému nekonzistentní analýzy</h2>
+<ul>
+<li>To jsem moc lazy psát..</li>
+<li>Vyřešíme problém nekonzistentní analýzy, ale vznikne problém uváznutí (deadlock)</li>
+</ul>
+<h2 id="řešení-problému-uváznutí">Řešení problému uváznutí</h2>
+<ol type="1">
+<li>Detekce uváznutí:
+<ol type="1">
+<li>Nastavení časových limitů</li>
+<li>Detekce cyklů v grafu <em>Wait-for</em></li>
+</ol></li>
+<li>Prevence uváznutí pomocí časových razítek</li>
+</ol>
+<h2 id="řešení-uváznutí">Řešení uváznutí</h2>
+<ul>
+<li>Snažíme se uváznutí předejít úpravou uzamykacího protokolu</li>
+</ul>
+<ol type="1">
+<li><p>Každé transakci je předěleno časové razítko - čas začátek transakce - <strong>je unikátní</strong></p></li>
+<li><p>Pokud transakce A požaduje zámek na záznam, který už je uzamčený transakcí B</p>
+<ul>
+<li><strong>Wait-Die</strong>: pokud je A starší než B, pak A čeká. Pokud je A mladší, A je zrušená pomocí <code>ROLLBACK</code> a spuštěna znovu</li>
+</ul>
+<figure>
+<img src="assets/wait-die.png" alt="" /><figcaption>wait-die</figcaption>
+</figure>
+<ul>
+<li><strong>Wound-Wait</strong>: pokud je A starší než B, pak B je zrušená pomocí <code>ROLLBACK</code> a spuštěna znovu. Pokud je A mladší, A čeká</li>
+</ul>
+<figure>
+<img src="assets/wound-wait.png" alt="" /><figcaption>wound-wait</figcaption>
+</figure></li>
+<li><p>Pokud je transakce spuštěna znovu, necháva si původní timestamp</p></li>
+</ol>
+<p>(wait-die: A čeká, wound-wait: B je zabito.. vždycky je zabito mladší)</p>
+<hr>
+<h1 id="sériový-a-serializovatelný-plán-10">Sériový a serializovatelný plán (10)</h1>
+<ul>
+<li>Pokud jsou transakce provedeny za sebou, mluvíme o <strong>sériovém plánu</strong></li>
+<li>Seriový plán zapisujeme jako entici uspořádanou podle pořadí vykonávání .. <em>(A,B)</em> ..</li>
+<li>Serializovatelnost =&gt; Míra korektnosti <br/></li>
+</ul>
+<ol type="1">
+<li>Ekvivalentní plány
+<ul>
+<li>Dva plány pro stejné transakce jsou ekvivalentní, když dávaí stejné výsledky</li>
+</ul></li>
+<li>Serializovatelný plán
+<ul>
+<li>Plán je serializovatelný, pokud je ekvivalentní s nějakým sériovým plánem</li>
+</ul></li>
+</ol>
+<ul>
+<li>Dvoufázové zamykání zajišťuje serializovatelnost plánu</li>
+</ul>
+<h2 id="věta-o-dvoufázovém-uzamykání">Věta o dvoufázovém uzamykání?</h2>
+<ul>
+<li>Pokud transakce dodržují přísné dvoufázové uzamykání, pak všechny možné souběžné plány jsou serializovatelné</li>
+</ul>
+<h2 id="transfer-processing-performace">Transfer Processing Performace</h2>
+<ul>
+<li>Měří se propustnost (počet transakcí za vteřinu)</li>
+</ul>
+<h2 id="úroveň-izolace">Úroveň izolace</h2>
+<ul>
+<li><p>Serializovatelnost garantuje izolaci transakcí ve smyslu podmínky <code>ACID</code></p></li>
+<li><p>Za izolovatelnost transakcí musíme zaplatit .. (<em>nižším výkonem</em>)</p></li>
+<li><p>SŘBD proto umožňují nastavit úroveň izolace transakcí</p></li>
+<li><p>4 úrovně izolace:</p>
+<ul>
+<li>READ UNCOMMITTED (RU) - Můžu uvolnit S a X předkoncem</li>
+<li>READ COMMITTED (RC) - Můžu uvolnit S před koncem</li>
+<li>REPEATABLE READ (RR)</li>
+<li>SERIALIZABLE (S)</li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Úroveň izolace</th>
+<th>Špinavé čtení</th>
+<th>Neopakovatelné čtení</th>
+<th>Výskyt fantomů</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>READ UNCOMMITTED</td>
+<td>ano</td>
+<td>ano</td>
+<td>ano</td>
+</tr>
+<tr class="even">
+<td>READ COMMITTED</td>
+<td>ne</td>
+<td>ano</td>
+<td>ano</td>
+</tr>
+<tr class="odd">
+<td>REPEATABLE READ</td>
+<td>ne</td>
+<td>ne</td>
+<td>ano</td>
+</tr>
+<tr class="even">
+<td>SERIALIZABLE</td>
+<td>ne</td>
+<td>ne</td>
+<td>ne</td>
+</tr>
+</tbody>
+</table>
+<h2 id="neopakovatelné-čtení">Neopakovatelné čtení</h2>
+<ul>
+<li>vyskytuje se od READ COMMITED a níž</li>
+<li><code>SELECT</code> požaduje zámek S, ale nedodrží dvoufázové zamykání.. může zámek uvolnit před ukončením transakce</li>
+<li>X zámky jsou uvolněny až po ukončení transakce</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>SELECT t</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>UPDATE t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td></td>
+<td>COMMIT</td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td>SELECT t</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>t5</td>
+<td>COMMIT</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Kde se <code>SELECT</code> a <code>UPDATE</code> týkají stejného záznamu <code>t</code></li>
+</ul>
+<h2 id="výskyt-fantomů">Výskyt fantomů</h2>
+<ul>
+<li>Vyskytuje se od REPEATABLE READ a níž</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Čas</th>
+<th>Transakce A</th>
+<th>Transakce B</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>t1</td>
+<td>SELECT &lt;t0-t2&gt;</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>t2</td>
+<td></td>
+<td>INSERT t</td>
+</tr>
+<tr class="odd">
+<td>t3</td>
+<td></td>
+<td>COMMIT</td>
+</tr>
+<tr class="even">
+<td>t4</td>
+<td>SELECT &lt;t0-t2&gt;</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>t5</td>
+<td>COMMIT</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Kde se <code>SELECT</code> a <code>INSERT</code> týkají stejné množiny záznamů</li>
+</ul>
+<h2 id="správa-verzí">Správa verzí</h2>
+<ul>
+<li>Nevýhodou je zvýšený požadavek na paměť</li>
+<li>Pokud převažují čtení, je výhodnější použít správu verzí</li>
+<li>SŘBD proto často používají kombinaci obou</li>
+</ul>
+<h2 id="granualita-zámků">Granualita zámků</h2>
+<ul>
+<li>Zámky mohou být udělovány na různých úrovních
+<ul>
+<li>Databáze, Tabulka, Záznam, Hodnota atributu</li>
+</ul></li>
+<li>Důvodem zavedení je zvýšená propustnost</li>
+<li>U malých objektů =&gt; jemná granualita</li>
+<li>U velkých objektů =&gt; hrubá granualita</li>
+</ul>
+<hr>
+<h1 id="fyzická-implementace-11">Fyzická implementace (11)</h1>
+<ul>
+<li>Záznamy v tabulce nejsou nijak uspořádány</li>
+<li>Záznamy nejsou fyzicky mazány, ale jen označeny jako smazané
+<ul>
+<li>Teoreticky O(1), ale záznam se musí najít, takže O(n)</li>
+<li>Počet blok haldy se po operaci nesnižuje</li>
+</ul></li>
+<li>Vkládání je teoreticky O(1), ale musí se kontrolovat primární klíče.. takže O(n)</li>
+</ul>
+<h2 id="cena-operací-plánu">Cena operací plánu</h2>
+<ul>
+<li>IO Cost - počet přístupů ke stránkám</li>
+<li>CPU Cost - počet operací s daty</li>
+<li>Čas operace (Processing time) - záleží na konkrétním serveru, méně často používaný</li>
+</ul>
+<h2 id="index">Index</h2>
+<ul>
+<li>Datová struktura <strong>B-strom</strong>, poskytuje O(log n) složitost základních operací</li>
+<li>Automaticky vytvořen pro primární klíč</li>
+<li>Index je dvojce (hodnota pk, odkaz na záznamm do haldy)</li>
+<li>Tomu odkazu se říka RID nebo ROWID</li>
+<li>Urychluje vysoce selektivní dotazy (malý počet záznamů)</li>
+</ul>
+<h2 id="složený-klíč">Složený klíč</h2>
+<ul>
+<li>Pokud klíč obsahuje více atributů, říkáme mu složený klíč</li>
+<li>Lexikografické uspořádání</li>
+</ul>
+</body>
+</html>
