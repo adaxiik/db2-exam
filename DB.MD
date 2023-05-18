@@ -3,6 +3,27 @@ h3
 {
     font-weight: bold;
 }
+table {
+    margin-bottom: 24px;
+    border-spacing: 0;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+}
+table th {
+    padding: 3px 10px;
+    background-color: white;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid black;
+}
+table td {
+    padding: 3px 10px;
+    border-top: 1px solid black;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+}
 </style>
 
 
@@ -517,7 +538,7 @@ Několik typů procedur:
 - Automaticky vytvořen pro primární klíč
 - Index je dvojce (hodnota pk, odkaz na záznamm do haldy)
 - Tomu odkazu se říka RID nebo ROWID
-- Urychluje vysoce selektivní dotazy (malý počet záznamů)
+- Urychluje vysoce selektivní dotazy? (malý počet záznamů)
 
 ## Složený klíč
 - Pokud klíč obsahuje více atributů, říkáme mu složený klíč

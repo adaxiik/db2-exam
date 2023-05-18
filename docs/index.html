@@ -85,6 +85,27 @@ h3
 {
     font-weight: bold;
 }
+table {
+    margin-bottom: 24px;
+    border-spacing: 0;
+    border-bottom: 2px solid black;
+    border-top: 2px solid black;
+}
+table th {
+    padding: 3px 10px;
+    background-color: white;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid black;
+}
+table td {
+    padding: 3px 10px;
+    border-top: 1px solid black;
+    border-left: none;
+    border-bottom: none;
+    border-right: none;
+}
 </style>
 <h1 id="plsql-2">PL/SQL (2)</h1>
 <h3 id="výhody">Výhody</h3>
@@ -1044,7 +1065,7 @@ h3
 <li>Automaticky vytvořen pro primární klíč</li>
 <li>Index je dvojce (hodnota pk, odkaz na záznamm do haldy)</li>
 <li>Tomu odkazu se říka RID nebo ROWID</li>
-<li>Urychluje vysoce selektivní dotazy (malý počet záznamů)</li>
+<li>Urychluje vysoce selektivní dotazy? (malý počet záznamů)</li>
 </ul>
 <h2 id="složený-klíč">Složený klíč</h2>
 <ul>
