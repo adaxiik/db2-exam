@@ -537,7 +537,7 @@ Několik typů procedur:
 - Datová struktura **B plus -strom**, poskytuje O(log n) složitost základních operací
     - data jsou jen v listech a mají navzájem na sebe pointery jako normální pole 
     - [vskutku interesující struktura](https://www.geeksforgeeks.org/introduction-of-b-tree/)
-![B plus tree](assets/b+tree.png)
+![B plus tree](assets/b+tree.jpg)
 - Automaticky vytvořen pro primární klíč u oracle databáze
 - Index je dvojce (hodnota pk, odkaz na záznamm do haldy)
 - Tomu odkazu se říka RID nebo ROWID
