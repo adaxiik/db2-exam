@@ -40,18 +40,18 @@ table td {
 ```sql
 declare -- nepovinná deklarace lokálncích proměnných
 begin -- povinné otevření bloku příkazů
-exception -- nepovinné zachytávání vyjímek
+exception -- nepovinné zachytávání výjímek
 end -- povinné ukončení bloku
 || -- operátor konkatenace (sjednocení řetězců)
 v_lg Student.login%TYPE -- proměnná v_lg bude stejného typu co Student login 
 %ROWTYPE -- strukturovaný datový typ
 ```
 
-## Vyjímky
+## Výjimky
 - s `set autocommit on` bude každý příkaz jedna transakce, takže operace `commit` a `rollback` nemají smysl
 - s `set autocommit off` začíná transakce koncem té předchozí a je ukončena `commit` nebo `rollback`
 
-#### Příklady vyjímek
+#### Příklady výjimek
 - `NO_DATA_FOUND` - `select` nevrátil žádný řádek
 - `TOO_MANY_ROWS` - `select into` vrátilo více než jeden řádek
 - `VALUE_ERROR` - chybná manipulace s hodnotou
@@ -89,7 +89,7 @@ Několik typů procedur:
 
 ## Balíky
 - Něco jako knihovny v jiných jazycích
-- Seskupují procedury, funkce, proměnné, vyjímky do jednoho jmeného prostoru
+- Seskupují procedury, funkce, proměnné, výjimky do jednoho jmenného prostoru
 - Specifikace a tělo
 
 ## Bulk operace
