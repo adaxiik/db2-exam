@@ -121,17 +121,17 @@ table td {
 <h2 id="plsql-blok">PL/SQL blok</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">declare</span> <span class="co">-- nepovinná deklarace lokálncích proměnných</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="cf">begin</span> <span class="co">-- povinné otevření bloku příkazů</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">exception</span> <span class="co">-- nepovinné zachytávání výjímek</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">exception</span> <span class="co">-- nepovinné zachytávání vyjímek</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="cf">end</span> <span class="co">-- povinné ukončení bloku</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">||</span> <span class="co">-- operátor konkatenace (sjednocení řetězců)</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>v_lg Student.login<span class="dt">%TYPE</span> <span class="co">-- proměnná v_lg bude stejného typu co Student login </span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="dt">%ROWTYPE</span> <span class="co">-- strukturovaný datový typ</span></span></code></pre></div>
-<h2 id="výjimky">Výjimky</h2>
+<h2 id="vyjímky">Vyjímky</h2>
 <ul>
 <li>s <code>set autocommit on</code> bude každý příkaz jedna transakce, takže operace <code>commit</code> a <code>rollback</code> nemají smysl</li>
 <li>s <code>set autocommit off</code> začíná transakce koncem té předchozí a je ukončena <code>commit</code> nebo <code>rollback</code></li>
 </ul>
-<h4 id="příklady-výjimek">Příklady výjimek</h4>
+<h4 id="příklady-vyjímek">Příklady vyjímek</h4>
 <ul>
 <li><code>NO_DATA_FOUND</code> - <code>select</code> nevrátil žádný řádek</li>
 <li><code>TOO_MANY_ROWS</code> - <code>select into</code> vrátilo více než jeden řádek</li>
@@ -172,7 +172,7 @@ table td {
 <h2 id="balíky">Balíky</h2>
 <ul>
 <li>Něco jako knihovny v jiných jazycích</li>
-<li>Seskupují procedury, funkce, proměnné, výjimky do jednoho jmenného prostoru</li>
+<li>Seskupují procedury, funkce, proměnné, vyjímky do jednoho jmeného prostoru</li>
 <li>Specifikace a tělo</li>
 </ul>
 <h2 id="bulk-operace">Bulk operace</h2>
@@ -191,7 +191,7 @@ table td {
 </ul>
 <h2 id="dynamické-sql">Dynamické SQL</h2>
 <ul>
-<li>umožňuje sestavit a volat jakékoliv SQL příkazy (na které má uživatel právo) za běhu aplikace</li>
+<li>Umožňuje sestavit a volat jakékoliv SQL příkazy (na které má uživatel právo) za běhu aplikace</li>
 <li>Nevýhoda je, že nelze ověřit syntaktickou správnost</li>
 <li>Nebezpečí sql injection</li>
 <li><strong>Používame jen tehdy, když není možno použít statické PL/SQL</strong></li>
@@ -206,7 +206,7 @@ table td {
 <li>Tento proces může trvat déle, než samotné vykonání dotazu</li>
 </ol></li>
 <li>Pokud by již dříve zaslán, použije se dříve vytvořený plán vykonávání</li>
-<li>Při kontrole zda už nebyl vykonán se kontroluje cel řetězec
+<li>Při kontrole zda už nebyl vykonán se kontroluje celý řetězec
 <ul>
 <li><code>select * from student where login = 'x'</code> a <code>select * from student where login = 'y'</code> se budou lišit</li>
 </ul></li>
@@ -215,7 +215,7 @@ table td {
 <li><code>select * from student where login = :lg</code> a <code>select * from student where login = :lg</code> se budou shodovat</li>
 <li>Snižuje se tím zátěž na DBS a čas vykonávní</li>
 </ul></li>
-<li>PL/SQL používá vázané proměnné automaticky</li>
+<li>Statické PL/SQL používá vázané proměnné automaticky</li>
 <li><em>Vázané proměnné můžeme použít pouze u literálů (např. hodnoty atributu.. né jména tabulky)</em></li>
 <li>Porovnání výkonu
 <ul>
@@ -248,8 +248,8 @@ table td {
 </ul>
 <h2 id="korektní-vs-konzistentní-stav">Korektní vs Konzistentní stav?</h2>
 <ul>
-<li>Korektní stav - stav, který odpovídá omezením (např. hodnota atributu musí být v intervalu) ????</li>
-<li>TBD.. pm me</li>
+<li>Korektní stav - dodržování pravidel a integritních omezení pro jednotlivá data (např. hodnota atributu musí být v intervalu)</li>
+<li>Konzistentní stav - dodržování vztahů, integrita dat a další aspekty zajišťující správnost datového modelu a schématu databáze</li>
 </ul>
 <h2 id="transakce">Transakce</h2>
 <ul>
@@ -270,7 +270,7 @@ table td {
 <li>Chyba HW (hard crash) - Poškození disku, nebo ztráta dat</li>
 </ul></li>
 </ul>
-<h2 id="potvrzovací-bod">Potvrzovací bod</h2>
+<h2 id="potvrzovací-bod-commit-point">Potvrzovací bod (Commit point)</h2>
 <ul>
 <li>Operace <code>commit</code> zavádí potvrzovací bod</li>
 <li>Operace <code>rollback</code> vrací databázi do stavu posledního potvrzovacího bodu</li>
@@ -283,7 +283,7 @@ table td {
 <h2 id="vlastnost-acid">Vlastnost ACID</h2>
 <ul>
 <li><strong>A</strong> =&gt; Atomičnost - transakce je nedělitelná =&gt; musí být provedeny všechny operace, nebo žádná</li>
-<li><strong>C</strong> =&gt; Korektnost- transakce převádí korektní stav db do jiného korektního stavu (mezi začátkem a koncem nemusí být db v korektním stavu)</li>
+<li><strong>C</strong> =&gt; Korektnost - transakce převádí korektní stav db do jiného korektního stavu (mezi začátkem a koncem nemusí být db v korektním stavu)</li>
 <li><strong>I</strong> =&gt; Izolovanost - transakce jsou navzájem izolovány =&gt; změny provedené jednou transakcí jsou pro ostatní viditelné až po <code>COMMIT</code></li>
 <li><strong>D</strong> =&gt; Trvalost - změny provedené transakcí jsou trvale uloženy v db</li>
 <li><em>(atomicity, consistency, isolation, durability)</em></li>
@@ -300,7 +300,7 @@ table td {
 <ul>
 <li>Zotavení není vázáno pouze na jednu transakci, ale na celou databázi</li>
 <li>Hlavní problémem při systémové chybě, je ztráta obsahu vlastní paměti</li>
-<li>Během zotavení se po restartu provádí:
+<li>Během zotavení se po restartu provádí (záleží podle algotitmu):
 <ul>
 <li>Přesný stav transakce přerušné chybou není znám
 <ul>
@@ -335,7 +335,7 @@ table td {
 <li>Pokud transakce selže, je nutné provést <strong>UNDO</strong> (na disk byly zapsány aktualizace, které musí být zrušeny)</li>
 <li>Do logu se <em>ukládají původní hodnoty</em>, což umožňuje UNDO</li>
 <li><strong>REDO</strong> není nutné, protože aktualizace byly zapsány do db</li>
-<li>(UNDO/NO-REDO), protože aktualizace bbyly zapsány do db před potvrzením transakce</li>
+<li>(UNDO/NO-REDO), protože aktualizace byly zapsány do db před potvrzením transakce</li>
 <li><strong>Nízký výkon</strong></li>
 </ul></li>
 </ul>
@@ -363,7 +363,7 @@ table td {
 <li>T2 =&gt; DBMS provede <strong>redo</strong> pro aktualizace provedené po Tc</li>
 <li>T3 =&gt; DBMS provede <strong>undo</strong> pro aktualizace provedené před Tc</li>
 <li>T4 =&gt; DBMS provede <strong>redo</strong> pro všechny aktualizace (ty byly při COMMITu zapsány do logu)</li>
-<li>T5 =&gt; Neřešímě.. COMMIT nebyl proveden a žádné aktualizace nebyly zapsány do db v čase Tc</li>
+<li>T5 =&gt; Neřešíme… COMMIT nebyl proveden a žádné aktualizace nebyly zapsány do db v čase Tc</li>
 </ul>
 <h3 id="po-restartu-dbs-spustí-tento-algoritmus">Po restartu DBS spustí tento algoritmus:</h3>
 <ol type="1">
@@ -668,7 +668,7 @@ table td {
 <li><strong>Zamykání</strong> (locking) - používá většina DBMS
 <ul>
 <li>Pesimistický přístup k souběžnému zpracování (Předpoklad, že se paralelní transakce budou navzájem ovlivňovat)</li>
-<li>Systém má jednu kopii data jednotlivým transakcím přidělujej zámky
+<li>Systém má jednu kopii dat a jednotlivým transakcím přiděluje zámky
 <ul>
 <li><em>(Funguje to prostě jak mutex/locking v pythonu, c# .. 8 - slide 22)</em></li>
 </ul></li>
@@ -866,12 +866,14 @@ table td {
 <ul>
 <li>Pokud jsou transakce provedeny za sebou, mluvíme o <strong>sériovém plánu</strong></li>
 <li>Seriový plán zapisujeme jako entici uspořádanou podle pořadí vykonávání .. <em>(A,B)</em> ..</li>
-<li>Serializovatelnost =&gt; Míra korektnosti <br/></li>
+<li>Serializovatelný plán bude mít vždy stejný výsledek pro libovolné pořadí provedení transakcí</li>
+<li>Serializovatelnost =&gt; Míra korektnosti</li>
 </ul>
+<p><br/></p>
 <ol type="1">
 <li>Ekvivalentní plány
 <ul>
-<li>Dva plány pro stejné transakce jsou ekvivalentní, když dávaí stejné výsledky</li>
+<li>Dva plány pro stejné transakce jsou ekvivalentní, když dávají stejné výsledky</li>
 </ul></li>
 <li>Serializovatelný plán
 <ul>
@@ -892,14 +894,14 @@ table td {
 <h2 id="úroveň-izolace">Úroveň izolace</h2>
 <ul>
 <li><p>Serializovatelnost garantuje izolaci transakcí ve smyslu podmínky <code>ACID</code></p></li>
-<li><p>Za izolovatelnost transakcí musíme zaplatit .. (<em>nižším výkonem</em>)</p></li>
+<li><p>Za izolovatelnost transakcí musíme zaplatit … (<em>nižším výkonem</em>)</p></li>
 <li><p>SŘBD proto umožňují nastavit úroveň izolace transakcí</p></li>
 <li><p>4 úrovně izolace:</p>
 <ul>
-<li>READ UNCOMMITTED (RU) - Můžu uvolnit S a X předkoncem</li>
+<li>READ UNCOMMITTED (RU) - Můžu uvolnit S a X před koncem</li>
 <li>READ COMMITTED (RC) - Můžu uvolnit S před koncem</li>
-<li>REPEATABLE READ (RR)</li>
-<li>SERIALIZABLE (S)</li>
+<li>REPEATABLE READ (RR) - Zamyká jen objekty, se kterými transakce pracuje</li>
+<li>SERIALIZABLE (S) - Zamyká celou tabulku</li>
 </ul></li>
 </ul>
 <table>
@@ -1036,7 +1038,7 @@ table td {
 <ul>
 <li>Zámky mohou být udělovány na různých úrovních
 <ul>
-<li>Databáze, Tabulka, Záznam, Hodnota atributu</li>
+<li>Databáze, Tabulka, <em>(Blok/Stránka)</em>, Záznam, Hodnota atributu</li>
 </ul></li>
 <li>Důvodem zavedení je zvýšená propustnost</li>
 <li>U malých objektů =&gt; jemná granualita</li>
