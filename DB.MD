@@ -595,6 +595,7 @@ Několik typů procedur:
     
 2. Pokud `#user_count = 1`:
     2.1. Aktualizujeme záznam o uživateli
+    
         ```
         update User
         set
@@ -607,6 +608,7 @@ Několik typů procedur:
     
 3. Pokud `#user_count = 1`:
     3.1. Vložíme záznam o uživateli
+
         ```
         insert into User (first_name, last_name)
         values (#first_name, #last_name)

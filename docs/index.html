@@ -1063,10 +1063,10 @@ table td {
 </ul>
 <h2 id="index">Index</h2>
 <ul>
-<li>Datová struktura <strong>B plus -strom</strong>, poskytuje O(log n) složitost základních operací
+<li>Datová struktura <strong>B+ strom</strong>, poskytuje O(log n) složitost základních operací
 <ul>
 <li>data jsou jen v listech a mají navzájem na sebe pointery jako normální pole</li>
-<li><a href="https://www.geeksforgeeks.org/introduction-of-b-tree/">vskutku interesující struktura</a> <img src="assets/B+tree.jpg" alt="B plus tree" /></li>
+<li><a href="https://www.geeksforgeeks.org/introduction-of-b-tree/">vskutku interesující struktura</a> <img src="assets/B+tree.jpg" alt="B+ tree" /></li>
 </ul></li>
 <li>Automaticky vytvořen pro primární klíč u oracle databáze</li>
 <li>Index je dvojce (hodnota pk, odkaz na záznamm do haldy)</li>
@@ -1126,5 +1126,30 @@ table td {
 <li>místo toho se raději bude hledat na heapu</li>
 </ul></li>
 </ul>
+<hr>
+<h1 id="minispecifikace">Minispecifikace</h1>
+<p><strong>Název</strong>: Aktualizace uživatele</p>
+<p><strong>Popis</strong>: Aktualizuje uživatele v databázi, pokud tam není, tak ho vloží. Funkce bude řešena jako transakce.</p>
+<p><strong>Vstupy</strong>: <code>#id_user</code> - id uživatele <code>#first_name</code> - jméno uživatele <code>#last_name</code> - příjmení uživatele</p>
+<p><strong>Výstupy</strong> <code>#message</code> - výstupní zpráva (inicializováno na <code>NULL</code>)</p>
+<ol type="1">
+<li><p>Do proměnné <code>#user_count</code> si uložíme, kolik uživatelů s daným id existuje <code>sql     select count(*)     from User     where id = #id_user</code></p></li>
+<li><p>Pokud <code>#user_count = 1</code>: 2.1. Aktualizujeme záznam o uživateli</p>
+<pre><code> ```
+ update User
+ set
+     first_name = #first_name,
+     last_name = #last_name
+ where user_id = #user_id
+ ```</code></pre>
+<p>2.2 Nastavíme hlášení <code>#message</code> na <code>„Uživatel byl upraven.“</code>.</p></li>
+<li><p>Pokud <code>#user_count = 1</code>: 3.1. Vložíme záznam o uživateli</p>
+<pre><code> ```
+ insert into User (first_name, last_name)
+ values (#first_name, #last_name)
+ ```</code></pre>
+<p>3.2 Nastavíme hlášení <code>#message</code> na <code>„Uživatel byl přidán.“</code>.</p></li>
+<li><p>Transakci ukončíme.</p></li>
+</ol>
 </body>
 </html>
