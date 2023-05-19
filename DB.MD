@@ -539,10 +539,10 @@ Několik typů procedur:
 - Čas operace (Processing time) - záleží na konkrétním serveru, méně často používaný
 
 ## Index
-- Datová struktura **B plus -strom**, poskytuje O(log n) složitost základních operací
+- Datová struktura **B+ strom**, poskytuje O(log n) složitost základních operací
     - data jsou jen v listech a mají navzájem na sebe pointery jako normální pole 
     - [vskutku interesující struktura](https://www.geeksforgeeks.org/introduction-of-b-tree/)
-![B plus tree](assets/B+tree.jpg)
+![B+ tree](assets/B+tree.jpg)
 - Automaticky vytvořen pro primární klíč u oracle databáze
 - Index je dvojce (hodnota pk, odkaz na záznamm do haldy)
 - Tomu odkazu se říka RID nebo ROWID
@@ -569,3 +569,49 @@ Několik typů procedur:
 
 - vyhledávání pomocí indexu se neprovede pokud budeme hledat ``WHERE ID_produktu = 123``
     - místo toho se raději bude hledat na heapu
+
+<hr>
+
+# Minispecifikace
+
+**Název**: Aktualizace uživatele
+
+**Popis**: Aktualizuje uživatele v databázi, pokud tam není, tak ho vloží. Funkce bude řešena jako transakce.
+
+**Vstupy**: 
+    `#id_user` - id uživatele
+    `#first_name` - jméno uživatele
+    `#last_name` - příjmení uživatele
+    
+**Výstupy**
+    `#message` - výstupní zpráva (inicializováno na `NULL`)
+    
+1. Do proměnné `#user_count` si uložíme, kolik uživatelů s daným id existuje
+    ```sql
+    select count(*)
+    from User
+    where id = #id_user
+    ```
+    
+2. Pokud `#user_count = 1`:
+    2.1. Aktualizujeme záznam o uživateli
+        ```
+        update User
+        set
+            first_name = #first_name,
+            last_name = #last_name
+        where user_id = #user_id
+        ```
+        
+    2.2 Nastavíme hlášení `#message` na `„Uživatel byl upraven.“`.
+    
+3. Pokud `#user_count = 1`:
+    3.1. Vložíme záznam o uživateli
+        ```
+        insert into User (first_name, last_name)
+        values (#first_name, #last_name)
+        ```
+        
+    3.2 Nastavíme hlášení `#message` na `„Uživatel byl přidán.“`.
+
+4. Transakci ukončíme.
