@@ -121,17 +121,17 @@ table td {
 <h2 id="plsql-blok">PL/SQL blok</h2>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">declare</span> <span class="co">-- nepovinná deklarace lokálncích proměnných</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="cf">begin</span> <span class="co">-- povinné otevření bloku příkazů</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">exception</span> <span class="co">-- nepovinné zachytávání vyjímek</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">exception</span> <span class="co">-- nepovinné zachytávání výjímek</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="cf">end</span> <span class="co">-- povinné ukončení bloku</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="op">||</span> <span class="co">-- operátor konkatenace (sjednocení řetězců)</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>v_lg Student.login<span class="dt">%TYPE</span> <span class="co">-- proměnná v_lg bude stejného typu co Student login </span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a><span class="dt">%ROWTYPE</span> <span class="co">-- strukturovaný datový typ</span></span></code></pre></div>
-<h2 id="vyjímky">Vyjímky</h2>
+<h2 id="výjimky">Výjimky</h2>
 <ul>
 <li>s <code>set autocommit on</code> bude každý příkaz jedna transakce, takže operace <code>commit</code> a <code>rollback</code> nemají smysl</li>
 <li>s <code>set autocommit off</code> začíná transakce koncem té předchozí a je ukončena <code>commit</code> nebo <code>rollback</code></li>
 </ul>
-<h4 id="příklady-vyjímek">Příklady vyjímek</h4>
+<h4 id="příklady-výjimek">Příklady výjimek</h4>
 <ul>
 <li><code>NO_DATA_FOUND</code> - <code>select</code> nevrátil žádný řádek</li>
 <li><code>TOO_MANY_ROWS</code> - <code>select into</code> vrátilo více než jeden řádek</li>
@@ -172,7 +172,7 @@ table td {
 <h2 id="balíky">Balíky</h2>
 <ul>
 <li>Něco jako knihovny v jiných jazycích</li>
-<li>Seskupují procedury, funkce, proměnné, vyjímky do jednoho jmeného prostoru</li>
+<li>Seskupují procedury, funkce, proměnné, výjimky do jednoho jmenného prostoru</li>
 <li>Specifikace a tělo</li>
 </ul>
 <h2 id="bulk-operace">Bulk operace</h2>
@@ -1061,16 +1061,68 @@ table td {
 </ul>
 <h2 id="index">Index</h2>
 <ul>
-<li>Datová struktura <strong>B-strom</strong>, poskytuje O(log n) složitost základních operací</li>
-<li>Automaticky vytvořen pro primární klíč</li>
+<li>Datová struktura <strong>B plus -strom</strong>, poskytuje O(log n) složitost základních operací
+<ul>
+<li>data jsou jen v listech a mají navzájem na sebe pointery jako normální pole</li>
+<li><a href="https://www.geeksforgeeks.org/introduction-of-b-tree/">vskutku interesující struktura</a> <img src="assets/B+tree.jpg" alt="B plus tree" /></li>
+</ul></li>
+<li>Automaticky vytvořen pro primární klíč u oracle databáze</li>
 <li>Index je dvojce (hodnota pk, odkaz na záznamm do haldy)</li>
 <li>Tomu odkazu se říka RID nebo ROWID</li>
 <li>Urychluje vysoce selektivní dotazy? (malý počet záznamů)</li>
+</ul>
+<h2 id="rozshavhový-dotaz-v-indexu">Rozshavhový dotaz v indexu</h2>
+<ul>
+<li>najdu první výskyt</li>
+<li>sekvenčně projedu rozsah</li>
+<li>vrátím rozsah</li>
 </ul>
 <h2 id="složený-klíč">Složený klíč</h2>
 <ul>
 <li>Pokud klíč obsahuje více atributů, říkáme mu složený klíč</li>
 <li>Lexikografické uspořádání</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>ID zakázky</th>
+<th>ID produktu</th>
+<th>Cena</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>123</td>
+<td>32</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>124</td>
+<td>5454</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>321</td>
+<td>217</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>123</td>
+<td>3017</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>321</td>
+<td>247</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>vyhledávání pomocí indexu se neprovede pokud budeme hledat <code>WHERE ID_produktu = 123</code>
+<ul>
+<li>místo toho se raději bude hledat na heapu</li>
+</ul></li>
 </ul>
 </body>
 </html>
