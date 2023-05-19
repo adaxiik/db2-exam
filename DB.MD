@@ -40,18 +40,18 @@ table td {
 ```sql
 declare -- nepovinná deklarace lokálncích proměnných
 begin -- povinné otevření bloku příkazů
-exception -- nepovinné zachytávání výjímek
+exception -- nepovinné zachytávání vyjímek
 end -- povinné ukončení bloku
 || -- operátor konkatenace (sjednocení řetězců)
 v_lg Student.login%TYPE -- proměnná v_lg bude stejného typu co Student login 
 %ROWTYPE -- strukturovaný datový typ
 ```
 
-## Výjimky
+## Vyjímky
 - s `set autocommit on` bude každý příkaz jedna transakce, takže operace `commit` a `rollback` nemají smysl
 - s `set autocommit off` začíná transakce koncem té předchozí a je ukončena `commit` nebo `rollback`
 
-#### Příklady výjimek
+#### Příklady vyjímek
 - `NO_DATA_FOUND` - `select` nevrátil žádný řádek
 - `TOO_MANY_ROWS` - `select into` vrátilo více než jeden řádek
 - `VALUE_ERROR` - chybná manipulace s hodnotou
@@ -89,7 +89,7 @@ Několik typů procedur:
 
 ## Balíky
 - Něco jako knihovny v jiných jazycích
-- Seskupují procedury, funkce, proměnné, výjimky do jednoho jmenného prostoru
+- Seskupují procedury, funkce, proměnné, vyjímky do jednoho jmeného prostoru
 - Specifikace a tělo
 
 ## Bulk operace
@@ -104,7 +104,7 @@ Několik typů procedur:
     - `lock table, commit, rollback, savepoint, set transaction`
 
 ## Dynamické SQL
-- umožňuje sestavit a volat jakékoliv SQL příkazy (na které má uživatel právo) za běhu aplikace
+- Umožňuje sestavit a volat jakékoliv SQL příkazy (na které má uživatel právo) za běhu aplikace
 - Nevýhoda je, že nelze ověřit syntaktickou správnost
 - Nebezpečí sql injection
 - **Používame jen tehdy, když není možno použít statické PL/SQL**
@@ -116,12 +116,12 @@ Několik typů procedur:
     2) Dotaz může být vykonán mnoha způsoby, DBS hledá ten nejlepší
     3) Tento proces může trvat déle, než samotné vykonání dotazu
 - Pokud by již dříve zaslán, použije se dříve vytvořený plán vykonávání
-- Při kontrole zda už nebyl vykonán se kontroluje cel řetězec
+- Při kontrole zda už nebyl vykonán se kontroluje celý řetězec
     - `select * from student where login = 'x'` a `select * from student where login = 'y'` se budou lišit
 - Používání **vázaných proměnných** (bind variables) umožňuje využít již vytvořený plán vykonávání
     - `select * from student where login = :lg` a `select * from student where login = :lg` se budou shodovat
     - Snižuje se tím zátěž na DBS a čas vykonávní
-- PL/SQL používá vázané proměnné automaticky
+- Statické PL/SQL používá vázané proměnné automaticky
 - *Vázané proměnné můžeme použít pouze u literálů (např. hodnoty atributu.. né jména tabulky)*
 - Porovnání výkonu
     - bez vázaných proměnných: 65.48s
@@ -149,8 +149,8 @@ Několik typů procedur:
 - Komponenta SŘBD, která se stará o řízení transakcí je `manager transakcí`
 
 ## Korektní vs Konzistentní stav?
-- Korektní stav - stav, který odpovídá omezením (např. hodnota atributu musí být v intervalu) ????
-- TBD.. pm me
+- Korektní stav - dodržování pravidel a integritních omezení pro jednotlivá data (např. hodnota atributu musí být v intervalu)
+- Konzistentní stav - dodržování vztahů, integrita dat a další aspekty zajišťující správnost datového modelu a schématu databáze
 
 ## Transakce
 - Logická jednotka práce s db (taky jednotkou zotavení)
@@ -165,7 +165,7 @@ Několik typů procedur:
     - Systémové (soft crash) - Vpadek proudu, nebo pád systému
     - Chyba HW (hard crash) - Poškození disku, nebo ztráta dat
 
-## Potvrzovací bod
+## Potvrzovací bod (Commit point)
 - Operace `commit` zavádí potvrzovací bod
 - Operace `rollback` vrací databázi do stavu posledního potvrzovacího bodu
 - V okamžiku potvrzení:
@@ -174,7 +174,7 @@ Několik typů procedur:
 
 ## Vlastnost ACID
 - **A** => Atomičnost - transakce je nedělitelná => musí být provedeny všechny operace, nebo žádná
-- **C** => Korektnost- transakce převádí korektní stav db do jiného korektního stavu (mezi začátkem a koncem nemusí být db v korektním stavu)
+- **C** => Korektnost - transakce převádí korektní stav db do jiného korektního stavu (mezi začátkem a koncem nemusí být db v korektním stavu)
 - **I** => Izolovanost - transakce jsou navzájem izolovány => změny provedené jednou transakcí jsou pro ostatní viditelné až po `COMMIT`
 - **D** => Trvalost - změny provedené transakcí jsou trvale uloženy v db 
 - *(atomicity, consistency, isolation, durability)*
@@ -187,7 +187,7 @@ Několik typů procedur:
 ## Zotavení systému
 - Zotavení není vázáno pouze na jednu transakci, ale na celou databázi
 - Hlavní problémem při systémové chybě, je ztráta obsahu vlastní paměti
-- Během zotavení se po restartu provádí:
+- Během zotavení se po restartu provádí (záleží podle algotitmu):
     - Přesný stav transakce přerušné chybou není znám
         - Musí být zrušena (UNDO)
     - Transakce byla úspěšně ukončena, ale změny nebyly přeneseny z logu do db
@@ -210,7 +210,7 @@ Několik typů procedur:
     - Pokud transakce selže, je nutné provést **UNDO** (na disk byly zapsány aktualizace, které musí být zrušeny)
     - Do logu se *ukládají původní hodnoty*, což umožňuje UNDO
     - **REDO** není nutné, protože aktualizace byly zapsány do db
-    - (UNDO/NO-REDO), protože aktualizace bbyly zapsány do db před potvrzením transakce 
+    - (UNDO/NO-REDO), protože aktualizace byly zapsány do db před potvrzením transakce 
     - **Nízký výkon**
 
 ![immediate_update](assets/immediate_update.png)
@@ -229,7 +229,7 @@ Několik typů procedur:
 - T2 => DBMS provede **redo** pro aktualizace provedené po Tc
 - T3 => DBMS provede **undo** pro aktualizace provedené před Tc
 - T4 => DBMS provede **redo** pro všechny aktualizace (ty byly při COMMITu zapsány do logu)
-- T5 => Neřešímě.. COMMIT nebyl proveden a žádné aktualizace nebyly zapsány do db v čase Tc
+- T5 => Neřešíme... COMMIT nebyl proveden a žádné aktualizace nebyly zapsány do db v čase Tc
 
 ### Po restartu DBS spustí tento algoritmus:
 1) Vytvoř 2 seznamy transakcí: UNDO a REDO
@@ -352,7 +352,7 @@ Několik typů procedur:
 ## Techniky řízení souběhu
 - **Zamykání** (locking) - používá většina DBMS
     - Pesimistický přístup k souběžnému zpracování (Předpoklad, že se paralelní transakce budou navzájem ovlivňovat)
-    - Systém má jednu kopii data jednotlivým transakcím přidělujej zámky
+    - Systém má jednu kopii dat a jednotlivým transakcím přiděluje zámky
         - *(Funguje to prostě jak mutex/locking v pythonu, c# .. 8 - slide 22)*
 - **Správa verzí** (multiversion) - používá většina DBMS
     - Optimistický přístup k souběžnému zpracování (Předpoklad, že se paralelní transakce nebudou navzájem ovlivňovat)
@@ -447,12 +447,17 @@ Několik typů procedur:
 # Sériový a serializovatelný plán (10)
 - Pokud jsou transakce provedeny za sebou, mluvíme o **sériovém plánu**
 - Seriový plán zapisujeme jako entici uspořádanou podle pořadí vykonávání .. *(A,B)* ..
+- Serializovatelný plán bude mít vždy stejný výsledek pro libovolné pořadí provedení transakcí
 - Serializovatelnost => Míra korektnosti
+
 <br/>
+
 1) Ekvivalentní plány
-    - Dva plány pro stejné transakce jsou ekvivalentní, když dávaí stejné výsledky
+    - Dva plány pro stejné transakce jsou ekvivalentní, když dávají stejné výsledky
+
 2) Serializovatelný plán   
     - Plán je serializovatelný, pokud je ekvivalentní s nějakým sériovým plánem
+    
 - Dvoufázové zamykání zajišťuje serializovatelnost plánu
 
 ## Věta o dvoufázovém uzamykání?
@@ -463,14 +468,14 @@ Několik typů procedur:
 
 ## Úroveň izolace
 - Serializovatelnost garantuje izolaci transakcí ve smyslu podmínky `ACID`
-- Za izolovatelnost transakcí musíme zaplatit .. (*nižším výkonem*)
+- Za izolovatelnost transakcí musíme zaplatit ... (*nižším výkonem*)
 - SŘBD proto umožňují nastavit úroveň izolace transakcí
 
 - 4 úrovně izolace:
-    - READ UNCOMMITTED (RU) - Můžu uvolnit S a X předkoncem
+    - READ UNCOMMITTED (RU) - Můžu uvolnit S a X před koncem
     - READ COMMITTED (RC) - Můžu uvolnit S před koncem
-    - REPEATABLE READ (RR)
-    - SERIALIZABLE (S)
+    - REPEATABLE READ (RR) - Zamyká jen objekty, se kterými transakce pracuje
+    - SERIALIZABLE (S) - Zamyká celou tabulku
 
 | Úroveň izolace | Špinavé čtení | Neopakovatelné čtení | Výskyt fantomů |
 | -------------- | ------------ | -------------------- | -------------- |
@@ -514,7 +519,7 @@ Několik typů procedur:
 
 ## Granualita zámků
 - Zámky mohou být udělovány na různých úrovních
-    - Databáze, Tabulka, Záznam, Hodnota atributu
+    - Databáze, Tabulka, *(Blok/Stránka)*, Záznam, Hodnota atributu
 - Důvodem zavedení je zvýšená propustnost
 - U malých objektů => jemná granualita
 - U velkých objektů => hrubá granualita
@@ -534,34 +539,12 @@ Několik typů procedur:
 - Čas operace (Processing time) - záleží na konkrétním serveru, méně často používaný
 
 ## Index
-- Datová struktura **B plus -strom**, poskytuje O(log n) složitost základních operací
-    - data jsou jen v listech a mají navzájem na sebe pointery jako normální pole 
-    - [vskutku interesující struktura](https://www.geeksforgeeks.org/introduction-of-b-tree/)
-![B plus tree](assets/B+tree.jpg)
-- Automaticky vytvořen pro primární klíč u oracle databáze
+- Datová struktura **B-strom**, poskytuje O(log n) složitost základních operací
+- Automaticky vytvořen pro primární klíč
 - Index je dvojce (hodnota pk, odkaz na záznamm do haldy)
 - Tomu odkazu se říka RID nebo ROWID
 - Urychluje vysoce selektivní dotazy? (malý počet záznamů)
 
-## Rozshavhový dotaz v indexu
-- najdu první výskyt
-- sekvenčně projedu rozsah
-- vrátím rozsah
-
-
 ## Složený klíč
 - Pokud klíč obsahuje více atributů, říkáme mu složený klíč
 - Lexikografické uspořádání
-
-
-| ID zakázky | ID produktu | Cena |
-| --- | ----------- | ----------- |
-| 1   | 123         | 32          |
-| 1   | 124         | 5454        |
-| 1   | 321         | 217         |
-| 2   | 123         | 3017        |
-| 2   | 321         | 247         |
-
-- vyhledávání pomocí indexu se neprovede pokud budeme hledat ``WHERE ID_produktu = 123``
-    - místo toho se raději bude hledat na heapu
-
