@@ -534,12 +534,34 @@ Několik typů procedur:
 - Čas operace (Processing time) - záleží na konkrétním serveru, méně často používaný
 
 ## Index
-- Datová struktura **B-strom**, poskytuje O(log n) složitost základních operací
-- Automaticky vytvořen pro primární klíč
+- Datová struktura **B plus -strom**, poskytuje O(log n) složitost základních operací
+    - data jsou jen v listech a mají navzájem na sebe pointery jako normální pole 
+    - [vskutku interesující struktura](https://www.geeksforgeeks.org/introduction-of-b-tree/)
+![B plus tree](assets/B+tree.jpg)
+- Automaticky vytvořen pro primární klíč u oracle databáze
 - Index je dvojce (hodnota pk, odkaz na záznamm do haldy)
 - Tomu odkazu se říka RID nebo ROWID
 - Urychluje vysoce selektivní dotazy? (malý počet záznamů)
 
+## Rozshavhový dotaz v indexu
+- najdu první výskyt
+- sekvenčně projedu rozsah
+- vrátím rozsah
+
+
 ## Složený klíč
 - Pokud klíč obsahuje více atributů, říkáme mu složený klíč
 - Lexikografické uspořádání
+
+
+| ID zakázky | ID produktu | Cena |
+| --- | ----------- | ----------- |
+| 1   | 123         | 32          |
+| 1   | 124         | 5454        |
+| 1   | 321         | 217         |
+| 2   | 123         | 3017        |
+| 2   | 321         | 247         |
+
+- vyhledávání pomocí indexu se neprovede pokud budeme hledat ``WHERE ID_produktu = 123``
+    - místo toho se raději bude hledat na heapu
+
